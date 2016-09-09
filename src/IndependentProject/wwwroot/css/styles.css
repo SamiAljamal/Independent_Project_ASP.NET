@@ -1,2 +1,5 @@
-﻿body {
+﻿#map_canvas{
+    width:640px;
+    height: 480px;
+
 }

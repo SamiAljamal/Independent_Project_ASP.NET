@@ -174,5 +174,6 @@
 --reference:C:\Users\epicodus\.nuget\packages\System.Xml.XDocument\4.0.11\ref\netstandard1.3\System.Xml.XDocument.dll
 --resource:"C:\Users\epicodus\Desktop\IndependentProject\src\IndependentProject\obj\Debug\netcoreapp1.0\IndependentProjectdotnet-compile.deps.json",IndependentProject.deps.json
 C:\Users\epicodus\Desktop\IndependentProject\src\IndependentProject\Program.cs
+C:\Users\epicodus\Desktop\IndependentProject\src\IndependentProject\RestClient.cs
 C:\Users\epicodus\Desktop\IndependentProject\src\IndependentProject\Startup.cs
 C:\Users\epicodus\Desktop\IndependentProject\src\IndependentProject\Controllers\HomeController.cs
