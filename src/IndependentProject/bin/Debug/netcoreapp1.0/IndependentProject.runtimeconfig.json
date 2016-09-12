@@ -2,10 +2,8 @@
   "runtimeOptions": {
     "framework": {
       "name": "Microsoft.NETCore.App",
-      "version": "1.0.0"
+      "version": "1.0.0-rc2-3002702"
     },
-    "configProperties": {
-      "System.GC.Server": true
-    }
+    "gcServer": true
   }
 }

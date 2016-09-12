@@ -11,7 +11,6 @@ namespace IndependentProject
     {
         public static void Main(string[] args)
         {
-            var client = new RestClient();
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
