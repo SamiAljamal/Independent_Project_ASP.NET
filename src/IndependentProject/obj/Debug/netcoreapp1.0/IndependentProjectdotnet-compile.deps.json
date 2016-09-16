@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0/",
-    "signature": "a687eec0ba8b72b162e98b41bea93c5340d8ed1e"
+    "signature": "1e18f2b5ae127ef20cf32b2b72b867d525192a18"
   },
   "compilationOptions": {
     "defines": [
@@ -27,12 +27,14 @@
           "Microsoft.AspNetCore.Mvc": "1.0.0",
           "Microsoft.EntityFrameworkCore": "1.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "1.0.0",
-          "Microsoft.AspNetCore.StaticFiles": "1.0.0"
+          "Microsoft.AspNetCore.StaticFiles": "1.0.0",
+          "autorest": "0.16.0"
         },
         "compile": {
           "IndependentProject.dll": {}
         }
       },
+      "autorest/0.16.0": {},
       "Libuv/1.9.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1"
@@ -2751,12 +2753,14 @@
           "Microsoft.AspNetCore.Mvc": "1.0.0",
           "Microsoft.EntityFrameworkCore": "1.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "1.0.0",
-          "Microsoft.AspNetCore.StaticFiles": "1.0.0"
+          "Microsoft.AspNetCore.StaticFiles": "1.0.0",
+          "autorest": "0.16.0"
         },
         "runtime": {
           "IndependentProject.dll": {}
         }
       },
+      "autorest/0.16.0": {},
       "Libuv/1.9.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1"
@@ -5374,6 +5378,11 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "autorest/0.16.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+wsEQ5kDy8GmxyUKhRBFpeqPrSh2XchCpXsrkbnM4eWJSRDV1XgDhyViWrCujI8N8kE8lLAIg5n15Ift7VK7pA=="
     },
     "Libuv/1.9.0": {
       "type": "package",

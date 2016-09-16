@@ -3,6 +3,9 @@
   "version": 2,
   "targets": {
     ".NETCoreApp,Version=v1.0": {
+      "autorest/0.16.0": {
+        "type": "package"
+      },
       "Libuv/1.9.0": {
         "type": "package",
         "dependencies": {
@@ -4079,6 +4082,34 @@
     }
   },
   "libraries": {
+    "autorest/0.16.0": {
+      "sha512": "+wsEQ5kDy8GmxyUKhRBFpeqPrSh2XchCpXsrkbnM4eWJSRDV1XgDhyViWrCujI8N8kE8lLAIg5n15Ift7VK7pA==",
+      "type": "package",
+      "path": "autorest/0.16.0",
+      "files": [
+        "AutoRest.0.16.0.nupkg.sha512",
+        "AutoRest.nuspec",
+        "tools/AutoRest.Core.dll",
+        "tools/AutoRest.Generator.Azure.CSharp.dll",
+        "tools/AutoRest.Generator.Azure.Extensions.dll",
+        "tools/AutoRest.Generator.Azure.Java.dll",
+        "tools/AutoRest.Generator.Azure.NodeJS.dll",
+        "tools/AutoRest.Generator.Azure.Python.dll",
+        "tools/AutoRest.Generator.Azure.Ruby.dll",
+        "tools/AutoRest.Generator.AzureResourceSchema.dll",
+        "tools/AutoRest.Generator.CSharp.dll",
+        "tools/AutoRest.Generator.Extensions.dll",
+        "tools/AutoRest.Generator.Java.dll",
+        "tools/AutoRest.Generator.NodeJS.dll",
+        "tools/AutoRest.Generator.Python.dll",
+        "tools/AutoRest.Generator.Ruby.dll",
+        "tools/AutoRest.Modeler.CompositeSwagger.dll",
+        "tools/AutoRest.Modeler.Swagger.dll",
+        "tools/AutoRest.exe",
+        "tools/AutoRest.json",
+        "tools/Newtonsoft.Json.dll"
+      ]
+    },
     "Libuv/1.9.0": {
       "sha512": "9Q7AaqtQhS8JDSIvRBt6ODSLWDBI4c8YxNxyCQemWebBFUtBbc6M5Vi5Gz1ZyIUlTW3rZK9bIr5gnVyv0z7a2Q==",
       "type": "package",
@@ -10453,7 +10484,8 @@
       "Microsoft.Extensions.Configuration.FileExtensions >= 1.0.0",
       "Microsoft.Extensions.Configuration.Json >= 1.0.0",
       "Microsoft.Extensions.Logging.Console >= 1.0.0",
-      "Microsoft.NETCore.App >= 1.0.0"
+      "Microsoft.NETCore.App >= 1.0.0",
+      "autorest >= 0.16.0"
     ],
     ".NETCoreApp,Version=v1.0": []
   },
