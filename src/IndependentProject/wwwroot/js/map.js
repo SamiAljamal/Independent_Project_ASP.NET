@@ -195,29 +195,85 @@
     }
             ]
         };
-        map = new google.maps.Map(document.getElementById("map_canvas"), mapProp);
+
+        var infoWindow = new google.maps.InfoWindow({
+            content: ""
+        });
+
+
+        map = new google.maps.Map(document.getElementById("map-canvas"), mapProp);
 
         var countryLayer = new google.maps.Data();
-        countryLayer.loadGeoJson('https://gist.githubusercontent.com/SamiAljamal/d27ec0e9c17ab88ac92372b31f252251/raw/b398dd324a659b0bed76e02698940eab03dcd762/Countries.json');
+        countryLayer.loadGeoJson('https://gist.githubusercontent.com/SamiAljamal/d3d7e1851bb973dfcd97d18b35a54daa/raw/c51eb1cf5845008b73c779b9c3ad44ccdc0d715e/SyrianRefugees.Json');
         countryLayer.setStyle(function (feature) {
             return {
+                fillColor: getColor(feature.getProperty('refugees')),
                 fillOpacity: 1,
                 strokeColor: 'white',
-                strokeWeight: .5
+                strokeWeight: .5,
+                zIndex : 1
                
             };
         });
+
+        countryLayer.addListener('mouseover', function (e) {
+            countryLayer.overrideStyle(e.feature, {
+                strokeColor: 'white',
+                strokeWeight: 2,
+                zIndex: 2
+            });
+        });
+
+        countryLayer.addListener('mouseout', function (e) {
+            countryLayer.revertStyle();
+        });
+
+        countryLayer.addListener('click', function (e) {
+            console.log(e);
+            infoWindow.setContent('<div style="line-height:1.00;overflow:hidden;white-space:nowrap;">' +
+              e.feature.getProperty('name') + '<br> Syrian Refugees: ' +
+               e.feature.getProperty('refugees') + '</div>');
+
+            var anchor = new google.maps.MVCObject();
+            anchor.set("position", e.latLng);
+            infoWindow.open(map, anchor);
+        });
+
+   
         countryLayer.setMap(map);
+
+        function getColor(refugees) {
+            var colors = [
+              '#969696',
+              '#bdd7e7',
+              '#6baed6',
+              '#3182bd',
+              '#08519c',
+            ];
+
+            return refugees >= 250000 ? colors[4] :
+              refugees > 50000 ? colors[3] :
+              refugees > 1000 ? colors[2] :
+              refugees > 1 ? colors[1] :
+              colors[0];
+        }
+
+
 
         var title = document.getElementById('title');
         var div = document.createElement('div');
-        div.innerHTML = '<h1> Refuge Crises</h1>';
+        div.innerHTML = '<h1> Refugee Crises</h1>';
         title.appendChild(div);
-       
+
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(title);
+  
     }
+   
+
+   
 
     google.maps.event.addDomListener(window, 'load', initialize);
-    map.controls[google.maps.ControlPosition.TOP_CENTER].push(title);
+   
    
 
 });
