@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Independent Project";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model IEnumerable<IndependentProject.Models.Settlement>
+
+<h2>Settlements</h2>
+<hr/>
+<ol>
+    @foreach(var settlement in Model)
+    {
+        <li>
+            <ul>
+                <li>Refugee Camp : @settlement.name</li>
+                <li>Country: @settlement.country</li>
+                <li>Camp Population: @settlement.population{"demography"}</li>
+                <li>Latitude: @settlement.Latitude</li>
+                <li>Longitude: @settlement.Longitude</li>
+
+            </ul>
+        </li>
+
+    }
+</ol>

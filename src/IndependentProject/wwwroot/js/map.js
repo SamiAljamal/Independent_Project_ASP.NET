@@ -1,5 +1,22 @@
 ﻿$(document).ready(function () {
     var map;
+    $("form#search1").submit(function (event) {
+        event.preventDefault();
+        var search = $("input#search").val();
+        var result = function () {
+            $.getJson("http://data.unhcr.org/api/population/settlements.json?instance_id=" + result, function (json) {
+                var name = json.name;
+                var country = json.country;
+                var lat = json.latitude;
+                var lon = json.longitude;
+                var pop = json.value;
+
+                $('')
+
+            })
+        }
+    });
+ 
 
     function initialize() {
 
@@ -266,6 +283,8 @@
         title.appendChild(div);
 
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(title);
+
+
   
     }
    
@@ -273,6 +292,8 @@
    
 
     google.maps.event.addDomListener(window, 'load', initialize);
+
+
    
    
 
