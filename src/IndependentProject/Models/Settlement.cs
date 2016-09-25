@@ -13,26 +13,16 @@ namespace IndependentProject.Models
     {
         public string name { get; set; }
         public string country { get; set; }
-        public int r04m { get; set; }
-        public int r04f { get; set; }
-        public int r511m { get; set; }
-        public int r511f { get; set; }
-        public int r1217m { get; set; }
-        public int r1217f { get; set; }
-        public int r1859m { get; set; }
-        public int r1859f { get; set; }
-        public int r60m { get; set; }
-        public int r60f { get; set; }
-        public int value { get; set; }
-        public DateTime updated { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public string search { get; set; }
+        public string region { get; set; }
+        public List<Object> population { get; set; }
+        public string latitude { get; set; }
+        public string longitude { get; set; }
+        public string instance_id { get; set; }
 
         public static List<Settlement> GetSettlements()
         {
             var client = new RestClient("http://data.unhcr.org/api");
-            var request = new RestRequest("/population/settlements.json?instance_id=liberia");
+            var request = new RestRequest("/population/settlements.json?&instance_id=syria");
 
             var response = new RestResponse();
             Task.Run(async () =>
