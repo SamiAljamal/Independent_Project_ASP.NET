@@ -8,7 +8,7 @@
 <h2>Settlements</h2>
 <hr/>
 <ol>
-    @foreach(var settlement in Model)
+    @foreach (var settlement in Model)
     {
         <li>
             <ul>
@@ -16,8 +16,13 @@
                 <li>Country: @settlement.country</li>
                 <li>Latitude: @settlement.latitude</li>
                 <li>Longitude: @settlement.longitude</li>
-                <li>Population: @settlement.population</li>
-               
+                @if (@settlement.population.Count >= 1)
+                {
+
+                    <li>Population: @settlement.population.Contains("value")</li>
+                }
+
+
 
             </ul>
         </li>
