@@ -10764,10 +10764,7 @@
       "Microsoft.Extensions.Logging.Console >= 1.0.0",
       "Microsoft.NETCore.App >= 1.0.0",
       "Newtonsoft.Json >= 9.0.1",
-      "RestSharp.NetCore >= 105.2.3",
-      "System.Runtime.Serialization.Formatters >= 4.0.0-rc4-24217-03",
-      "System.Runtime.Serialization.Xml >= 4.1.1",
-      "System.Xml.XmlSerializer >= 4.0.11"
+      "RestSharp.NetCore >= 105.2.3"
     ],
     ".NETCoreApp,Version=v1.0": []
   },

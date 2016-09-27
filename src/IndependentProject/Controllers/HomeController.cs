@@ -44,6 +44,8 @@ namespace IndependentProject.Controllers
         {
     
             var allSetlements = Settlement.GetSettlements();
+            ViewBag.Population = allSetlements;
+           
             return View(allSetlements);
           
        
