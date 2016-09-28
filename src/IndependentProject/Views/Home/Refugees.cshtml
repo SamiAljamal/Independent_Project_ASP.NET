@@ -8,14 +8,18 @@
 <h2>Settlements</h2>
 <hr/>
 <ol>
-    @foreach (var settlement in Model)
+    @foreach (var settlement in ViewBag.Settlements)
     {
         <li>
             <ul>
-                <li>Refugee Camp : @settlement.name</li>
+                <li>Refugee Camp : @settlement["name"]</li>
                 <li>Country: @settlement.country</li>
                 <li>Latitude: @settlement.latitude</li>
                 <li>Longitude: @settlement.longitude</li>
+                <li>pop: @foreach (var item in @settlement.population) {@item.value }</li>
+                <li>demography: @foreach (var item in @settlement.population)
+                {@item.demography }</li>
+              
              
                
 
