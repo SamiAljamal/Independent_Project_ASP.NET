@@ -52,6 +52,8 @@ namespace IndependentProject.Controllers
             }).Wait();
             var jsonResponse = JsonConvert.DeserializeObject<JArray>(response.Content);
             ViewBag.Settlements = jsonResponse;
+            ViewBag.FirstSettlementPop = jsonResponse.SelectToken("[0].population[0].demography");
+
           
          
           

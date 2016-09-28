@@ -17,8 +17,7 @@
                 <li>Latitude: @settlement.latitude</li>
                 <li>Longitude: @settlement.longitude</li>
                 <li>pop: @foreach (var item in @settlement.population) {@item.value }</li>
-                <li>demography: @foreach (var item in @settlement.population)
-                {@item.demography }</li>
+                <li>demography: @foreach (var item in @settlement.population) {@item.demography}</li>
               
              
                
@@ -27,6 +26,8 @@
 
             </ul>
         </li>
+        <li>Number: @settlement.population</li>
+        <li>Number: @ViewBag.FirstSettlementPop["04F"]</li>
 
     }
 </ol>
