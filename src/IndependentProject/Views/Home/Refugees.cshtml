@@ -27,13 +27,14 @@
 <div id="map-s"></div>
 
 <script>
+    google.charts.load('current', { 'packages': ['corechart'] });
       $(document).ready(function () {
             var map;
 
             function initialize() {
                 var mapProp = {
-                    center: new google.maps.LatLng(0, 0),
-                    zoom: 2,
+                    center: new google.maps.LatLng(34.472922, 37.833789),
+                    zoom: 5,
                     styles: [
             {
                 "featureType": "all",
@@ -229,18 +230,51 @@
                 $.getJSON('http://data.unhcr.org/api/population/regions.json?&instance_id=syria', function (json) {
                     $.each(json, function (key, data) {
                         var latLng = new google.maps.LatLng(parseFloat(data.latitude), parseFloat(data.longitude));
-                        var marker = new google.maps.Marker({
+                        function drawChart(marker) {
+                            var pieChart = new google.visualization.DataTable();
+                            pieChart.addColumn('string', 'Refugees');
+                            pieChart.addColumn('number', 'Demographcis');
+                            pieChart.addRows([
+                                ['Female under 5', parseFloat(data.population[0].demography["04F"])],
+                                ['Female 5-11', parseFloat(data.population[0].demography["0511F"])],
+                                ['Female 12-17', parseFloat(data.population[0].demography["1217F"])],
+                                ['Female 18-59', parseFloat(data.population[0].demography["1859F"])],
+                                ['Female 60+', parseFloat(data.population[0].demography["60F"])],
+                                ['Male under 4', parseFloat(data.population[0].demography["04M"])],
+                                ['Male 5-11', parseFloat(data.population[0].demography["0511M"])],
+                                ['Male 12-17', parseFloat(data.population[0].demography["1217M"])],
+                                ['Male 18-59', parseFloat(data.population[0].demography["1859M"])],
+                                ['Male 60+', parseFloat(data.population[0].demography["60M"])]
+                            ]);
+
+                            var options = { title: 'Region: '+ data.name +  ' Total Refuge Population: ' + parseFloat(data.population[0].value),  width: 400, height: 300, pieSlizeText: 'label' };
+                            var node = document.createElement('div'),
+                                infoWindow = new google.maps.InfoWindow(),
+                                chart = new google.visualization.PieChart(node);
+                            chart.draw(pieChart, options);
+                            infoWindow.setContent(node);
+                            infoWindow.open(marker.getMap(), marker);
+
+                        }
+
+                        var marker1 = new google.maps.Marker({
                             position: latLng,
-                            title: data.country
+                            map: map
+                           
+                        });
+                        
+                        google.maps.event.addListener(marker1, 'click', function () {
+                            drawChart(this);
 
                         });
-                        marker.setMap(map);
+                           
                     });
                 });
 
 
             }
-          
+
+            
             google.maps.event.addDomListener(window, 'load', initialize);
 
 
