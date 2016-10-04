@@ -39,31 +39,50 @@ namespace IndependentProject.Controllers
             });
             return tcs.Task;
         }
-
         public IActionResult Refugees()
         {
-            var client = new RestClient("http://data.unhcr.org/api");
-            var request = new RestRequest("/population/regions.json?&instance_id=syria");
+            var allSettlements = Settlement.GetSettlements();
+            return View(allSettlements);
 
+        }
+
+        public IActionResult settlementResult(string name, string instance_id)
+        {
+            var client = new RestClient("http://data.unhcr.org/api");
+            var request = new RestRequest("/population/search.json?name=" + name + "&level=settlement&instance_id=" + instance_id);
             var response = new RestResponse();
             Task.Run(async () =>
             {
                 response = await GetResponseContentAsync(client, request) as RestResponse;
             }).Wait();
-            var jsonResponse = JsonConvert.DeserializeObject<JArray>(response.Content);
-            ViewBag.Settlements = jsonResponse;
-            ViewBag.FirstSettlementPop = jsonResponse.SelectToken("[0].population[0].demography");
-
-          
-         
-          
-           
-
+            JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
+            ViewBag.result = jsonResponse;
             return View();
-
-
-
         }
+        //public IActionResult Refugees()
+        //{
+        //    var client = new RestClient("http://data.unhcr.org/api");
+        //    var request = new RestRequest("/population/settlements.json");
+
+        //    var response = new RestResponse();
+        //    Task.Run(async () =>
+        //    {
+        //        response = await GetResponseContentAsync(client, request) as RestResponse;
+        //    }).Wait();
+        //    var jsonResponse = JsonConvert.DeserializeObject<JArray>(response.Content);
+        //    ViewBag.Settlements = jsonResponse;
+        //    ViewBag.FirstSettlementPop = jsonResponse.SelectToken("[0].population[0].demography");
+
+
+
+
+
+
+        //    return View();
+
+
+
+        //}
 
     }
 }

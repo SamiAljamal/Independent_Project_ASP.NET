@@ -13,32 +13,14 @@ namespace IndependentProject.Models
     {
         public string name { get; set; }
         public string country { get; set; }
-        public string latitude { get; set; }
-        public string longitude { get; set; }
+        
+        public string instance_id { get; set; }
 
-        public List<JObject> population { get; set; }
 
         public static List<Settlement> GetSettlements()
         {
             var client = new RestClient("http://data.unhcr.org/api");
-            var request = new RestRequest("/population/regions.json?&instance_id=syria");
-
-            var response = new RestResponse();
-            Task.Run(async () =>
-            {
-                response = await GetResponseContentAsync(client, request) as RestResponse;
-            }).Wait();
-            var jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
-            var settlementList = JsonConvert.DeserializeObject<List<Settlement>>(jsonResponse.ToString());
-
-            return settlementList;
-          
-        }
-
-        public static List<Settlement> GetPopulation()
-        {
-            var client = new RestClient("http://data.unhcr.org/api");
-            var request = new RestRequest("/population/regions.json?&instance_id=syria");
+            var request = new RestRequest("/population/settlements.json");
 
             var response = new RestResponse();
             Task.Run(async () =>
@@ -46,10 +28,12 @@ namespace IndependentProject.Models
                 response = await GetResponseContentAsync(client, request) as RestResponse;
             }).Wait();
             var jsonResponse = JsonConvert.DeserializeObject<JArray>(response.Content);
-            var poplist = JsonConvert.DeserializeObject<List<Settlement>>(jsonResponse["population"].ToString());
+            var settlementList = JsonConvert.DeserializeObject<List<Settlement>>(jsonResponse.ToString());
 
-            return poplist;
+            return settlementList;
+          
         }
+
 
         public static Task<IRestResponse> GetResponseContentAsync(RestClient theClient, RestRequest theRequest)
         {
