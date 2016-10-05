@@ -5,76 +5,104 @@
 
 @model IEnumerable<IndependentProject.Models.Settlement>
 
-<h2>Settlements</h2>
+<h2>United Nations High Commissioner for Refugees crisis areas </h2>
 <hr/>
 <form action="settlementResult" class="results">
     <select name="name" id="name">
-    <optgroup value="syria" label="syria">
-        @foreach (var item in Model)
-        {
-            if (@item.instance_id == "syria")
-            {
-                <option value="@item.name||syria">@item.name</option>
-                          }
-
-        }
-    </optgroup>
-    <optgroup value="burundi" label="Burundi">
-        @foreach (var item in Model)
-        {
-            if (@item.instance_id == "burundi")
-            {
-                <option value="@item.name||burundi">@item.name</option>
-
-            }
-
-        }
-    </optgroup>
-    <optgroup value="car" label="Central African Republic of Congo">
-        @foreach (var item in Model)
-        {
-            if (@item.instance_id == "car")
-            {
-                <option value="@item.name">@item.name</option>
-
-            }
-
-        }
-    </optgroup>
+        <option value="car">Central African Republic</option>
+        <option value="burundi">Burundi</option>
+        <option value="cotedivoire">Ivory Coast</option>
+        <option value="horn">Somalia </option>
+        <option value="liberia">Liberia</option>
+        <option value="southsudan">South Sudan</option>
+        <option value="syria">Syria</option>
     </select>
-    
+
     <input type="submit" value="send" />
 </form>
 
     <div id="map-s"></div>
+    <div id="map-a"></div>
 
     <script>
+        
         function charts(data)
         {
-            var c = ChartType;
             var jsonData = data;
-            google.load("visualization", "1", { packages: ["corechart"], callback: drawVisualization });
-            function drawVisualization() {
+            google.charts.load('current', { 'packages': ['corechart','bar'] });
+            google.charts.setOnLoadCallback(drawPie);
+            google.charts.setOnLoadCallback(drawBar);
+            function drawPie() {
                 var data = new google.visualization.DataTable();
-                console.log(jsonData.population[1])
-                data.addColumn('string', 'Date');
+                data.addColumn('string', 'Name');
                 data.addColumn('number', 'Population');
-                $.each(jsonData.population[1], function (i, jsonData) {
-                    $.each(jsonData.timegraph, function (a, jsonData1) {
-                        var name = jsonData1.data;
-                        var value = parseFloat(jasonData1.total_individuals);
-                        data.addRows([[name, value]]);
-                    });
-                });
-               
-               
-                var chart;
-                if (c == "PieChart")
-                    chart = new google.visualization.PieChart(document.getElementById('map-s'));
+                
+                for (i = 0; i < jsonData.length; i++) {
+                    var name = jsonData[i].name
+                    
+
+                    var population = parseInt(jsonData[i].population[0].value);
+                    data.addRows([[name, population]]);
+                }
+                
+                   var chart = new google.visualization.PieChart(document.getElementById('map-s'));
                 chart.draw(data);
             }
+            function drawBar() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Country');
+                data.addColumn('number', "Female under 4");
+                data.addColumn('number', "Male under 4");
+                data.addColumn('number', "Female 5-11");
+                data.addColumn('number', "Male 5-11");
+                data.addColumn('number', "Female 12-17");
+                data.addColumn('number', "Male 12-17");
+                data.addColumn('number', "Female 18-59");
+                data.addColumn('number', "Male 18-59");
+                data.addColumn('number', "Female 60+");
+                data.addColumn('number', "Male 60+");
+                var f04;
+                var m04;
+                var f511;
+                var m511;
+                var f1217;
+                var m1217;
+                var f1859;
+                var m1859;
+                var f60;
+                var m60;
+                for (i = 0; i < jsonData.length; i++) {
+                    var name = jsonData[i].name;
+                    for (j = 0; j < jsonData[i].population.length; j++)
+                    {
+                        
+                        if (jsonData[i].population[j].demography !== undefined) {
+                            f04 = parseInt(jsonData[i].population[j].demography["04F"]);
+                            m04 = parseInt(jsonData[i].population[j].demography["04M"]);
+                            f511 = parseInt(jsonData[i].population[j].demography["511F"]);
+                            m511 = parseInt(jsonData[i].population[j].demography["511M"]);
+                            f1217 = parseInt(jsonData[i].population[j].demography["1217F"]);
+                            m1217 = parseInt(jsonData[i].population[j].demography["1217M"]);
+                            f1859 = parseInt(jsonData[i].population[j].demography["1859F"]);
+                            m1859 = parseInt(jsonData[i].population[j].demography["1859M"]);
+                            m60 = parseInt(jsonData[i].population[j].demography["60M"]);
+                            f60 = parseInt(jsonData[i].population[j].demography["60F"]);
+
+                        }
+                       
+                    }
+                    data.addRows([[name, f04, m04, f511, m511, f1217, m1217, f1859, m1859, m60, f60]])
+
+                }
+                var chart = new google.charts.Bar(document.getElementById('map-a'));
+                chart.draw(data);
+            }
+          
+           
+         
 
         }
+       
 
         $('.results').submit(function (event) {
             event.preventDefault();
@@ -82,13 +110,13 @@
             var name = info.split("||")[0];
             var instance_id = info.split("||")[1];
             $.ajax({
-                url: "http://data.unhcr.org/api/population/search.json?name=" + name +"&level=settlement&instance_id=" + instance_id,
+                url: "http://data.unhcr.org/api/population/countries.json?instance_id=" + name,
                 type: 'GET',
                 cache: true,
                 success: function (res) {
+                    charts(res);
+                   
                     console.log(res);
-                    charts(res)
-
                 }
 
             });

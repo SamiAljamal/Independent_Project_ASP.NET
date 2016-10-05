@@ -41,8 +41,8 @@ namespace IndependentProject.Controllers
         }
         public IActionResult Refugees()
         {
-            var allSettlements = Settlement.GetSettlements();
-            return View(allSettlements);
+            
+            return View();
 
         }
 

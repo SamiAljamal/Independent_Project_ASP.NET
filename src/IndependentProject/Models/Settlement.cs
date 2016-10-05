@@ -11,16 +11,15 @@ namespace IndependentProject.Models
 {
     public class Settlement
     {
-        public string name { get; set; }
-        public string country { get; set; }
+       
         
-        public string instance_id { get; set; }
+        public List<Settlement> instances { get; set; }
 
 
         public static List<Settlement> GetSettlements()
         {
             var client = new RestClient("http://data.unhcr.org/api");
-            var request = new RestRequest("/population/settlements.json");
+            var request = new RestRequest("/instances/list.json");
 
             var response = new RestResponse();
             Task.Run(async () =>
