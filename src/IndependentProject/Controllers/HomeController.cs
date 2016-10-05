@@ -17,14 +17,18 @@ namespace IndependentProject.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+       
 
-        public HomeController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext db)
+        public HomeController(UserManager<ApplicationUser> userManager, ApplicationDbContext db)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _db = db;
         }
+
+        public HomeController()
+        {
+        }
+
         // GET: /<controller>/
         public IActionResult Index()
         {

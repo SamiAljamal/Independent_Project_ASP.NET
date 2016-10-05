@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using IndependentProject.Models;
 using Microsoft.AspNetCore.Identity;
 using IndependentProject.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,12 +17,14 @@ namespace IndependentProject.Controllers
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private IHostingEnvironment _environment;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext db)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext db, IHostingEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _db = db;
+            _environment = environment;
         }
 
         // GET: /<controller>/

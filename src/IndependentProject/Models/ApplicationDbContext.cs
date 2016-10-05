@@ -13,5 +13,12 @@ namespace IndependentProject.Models
         {
 
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
+
+        public DbSet<Comment> Comments { get; set; }
     }
 }
