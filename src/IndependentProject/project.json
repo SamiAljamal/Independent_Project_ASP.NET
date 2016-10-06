@@ -20,8 +20,9 @@
       "type": "build"
     },
     "Microsoft.AspNetCore.StaticFiles": "1.0.0",
-    "RestSharp.NetCore": "105.2.3",
-    "System.ComponentModel.Annotations": "4.1.0"
+    "System.ComponentModel.Annotations": "4.1.0",
+    "RestSharp.NetCore": "105.2.3"
+
   },
 
   "tools": {

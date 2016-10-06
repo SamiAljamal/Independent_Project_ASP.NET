@@ -5,7 +5,7 @@
 
 @model IEnumerable<IndependentProject.Models.Settlement>
 
-<h2>United Nations High Commissioner for Refugees crisis areas </h2>
+<h2>UNHCR Refugee Groups </h2>
 <hr/>
 <form action="settlementResult" class="results">
     <select name="name" id="name">
@@ -26,7 +26,7 @@
 <table class="columns">
     <tr>
         <td><div id="set-map"></div></td>
-        <td><div id="table_div"></div></td>
+        <td><div id="tabled"></div></td>
     </tr>
     <tr>
         <td><div id="map-s"></div></td>
@@ -36,11 +36,89 @@
    
 
     <script>
+        function map(data) {
+            var jsonData = data;
+            google.charts.setOnLoadCallback(drawMap);
+          
+          
+
+            function drawMap() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('number', 'Latitude');
+                data.addColumn('number', 'Longitude');
+                data.addColumn('string', 'Name');
+                data.addColumn('number', 'Value');
+
+                var value;
+                for (i = 0; i < jsonData.length; i++) {
+                    var name = jsonData[i].name;
+                    var country = jsonData[i].country;
+                    var latitude = parseFloat(jsonData[i].latitude);
+                    var longitude = parseFloat(jsonData[i].longitude);
+                    for (j = 0; j < jsonData[i].population.length; j++) {
+
+                        if (jsonData[i].population[j] !== undefined) {
+                            value = parseInt(jsonData[i].population[j].value)
+
+                        }
+                    }
+                    data.addRows([[latitude, longitude, name, value]]);
+                    value = 0;
+                }
+                var mapZoom;
+                if ($("#name").val() === "syria") {
+                    mapZoom = '145';
+
+                }
+                else {
+                    mapZoom = '002'
+
+                }
+                var options = {
+                    displayMode: 'markers',
+                    region: mapZoom,
+                    colorAxis: { colors: ['green', 'blue'] }
+                };
+                var map = new google.visualization.GeoChart(document.getElementById('set-map'));
+                map.draw(data, options);
+
+                var data1 = new google.visualization.DataTable();
+                data1.addColumn('string', 'Refugee Camp');
+                data1.addColumn('string', 'Country');
+                data1.addColumn('number', 'Population');
+                data1.addColumn('string', 'Last update');
+                data1.addColumn('string', 'Website');
+                var value1;
+                var url;
+                var update;
+                for (i = 0; i < jsonData.length; i++) {
+                    var name1 = jsonData[i].name;
+                    var country1 = jsonData[i].country;
+                    for (j = 0; j < jsonData[i].population.length; j++) {
+
+                        if (jsonData[i].population[j] !== undefined) {
+                            value1 = parseInt(jsonData[i].population[j].value)
+                            url = jsonData[i].population[j].url;
+                            update = jsonData[i].population[j].updated_at;
+                        }
+                    }
+
+                    data1.addRows([[name1, country1, value1, update, url]]);
+                    value = 0;
+                    url = "";
+                    update = "";
+                }
+                var tabs = new google.visualization.Table(document.getElementById('tabled'));
+
+                tabs.draw(data1, { showRowNumber: true, width: '100%', height: '100%' });
+
+            }
+         
+        }
         
         function charts(data)
         {
             var jsonData = data;
-            google.charts.load("visualization", "1", { packages: ["corechart", "bar"] });
             google.charts.setOnLoadCallback(drawPie);
             google.charts.setOnLoadCallback(drawBar);
             function drawPie() {
@@ -108,123 +186,59 @@
                 var chart = new google.charts.Bar(document.getElementById('map-a'));
                 chart.draw(data);
             }
-          
-           
-         
 
         }
 
-        function map(data)
-        {
-            var jsonData = data;
-            google.charts.load("visualization", "1", { packages: ["geochart", "table"] });
-            google.charts.setOnLoadCallback(drawMap);
-            google.charts.setOnLoadCallback(drawTable);
-
-            function drawMap() {
-                var data = new google.visualization.DataTable();
-                data.addColumn('number', 'Latitude');
-                data.addColumn('number', 'Longitude');
-                data.addColumn('string', 'Name');
-                data.addColumn('number', 'Value');
-
-                var value;
-                for (i = 0; i < jsonData.length; i++) {
-                    var name = jsonData[i].name;
-                    var country = jsonData[i].country;
-                    var latitude = parseFloat(jsonData[i].latitude);
-                    var longitude = parseFloat(jsonData[i].longitude);
-                    for (j = 0; j < jsonData[i].population.length; j++) {
-
-                        if (jsonData[i].population[j] !== undefined) {
-                           value= parseInt(jsonData[i].population[j].value)
-
-                        }
-                    }
-                    data.addRows([[latitude, longitude, name, value]]);
-                    value = 0;
-                }
-                var mapZoom;
-                if ($("#name").val() === "syria")
-                {
-                    mapZoom = '145';
-
-                }
-                else {
-                    mapZoom ='002'
-
-                }
-                var options = {
-                    displayMode: 'markers',
-                    region: mapZoom,
-                    colorAxis: {colors: ['green', 'blue']}
-                };
-                var map = new google.visualization.GeoChart(document.getElementById('set-map'));
-                map.draw(data, options);
-
-            }
-            function drawTable() {
-                var data = new google.visualization.DataTable();
-                data.addColumn('string', 'Refugee Camp');
-                data.addColumn('string', 'Country');
-                data.addColumn('number', 'Population');
-                data.addColumn('string', 'Last update');
-                data.addColumn('string', 'Website');
-                var value;
-                var url;
-                var update;
-                for (i = 0; i < jsonData.length; i++) {
-                    var name = jsonData[i].name;
-                    var country = jsonData[i].country;
-                    for (j = 0; j < jsonData[i].population.length; j++) {
-
-                        if (jsonData[i].population[j] !== undefined) {
-                            value = parseInt(jsonData[i].population[j].value)
-                            url = jsonData[i].population[j].url;
-                            update = jsonData[i].population[j].updated_at;
-                        }
-                    }
-                    data.addRows([[name,country,value,update,url]]);
-                    value = 0;
-                    url = "";
-                    update = "";
-                }
-                var tabs = new google.visualization.Table(document.getElementById('table_div'));
-
-                tabs.draw(data, { showRowNumber: true, width: '100%', height: '100%' });
-
-            }
-            
-        }
+        
        
+        $(document).ready(function () {
+            $('.results').submit(function (event) {
+                google.charts.load("visualization", "1", { packages: ["geochart", "table","corechart","bar"] });
+                event.preventDefault();
+                var info = $("#name").val();
+                var name = info.split("||")[0];
+                var instance_id = info.split("||")[1];
+                $.ajax({
+                    url: "http://data.unhcr.org/api/population/countries.json?instance_id=" + name,
+                    type: 'GET',
+                    cache: true,
+                    success: function (res) {
+                        charts(res);
+                        console.log(res);
+                    }
 
-        $('.results').submit(function (event) {
-            event.preventDefault();
-            var info = $("#name").val();
-            var name = info.split("||")[0];
-            var instance_id = info.split("||")[1];
-            $.ajax({
-                url: "http://data.unhcr.org/api/population/countries.json?instance_id=" + name,
-                type: 'GET',
-                cache: true,
-                success: function (res) {
-                    charts(res);
-                   
-                    console.log(res);
-                }
+                });
+                $.ajax({
+                    url: "http://data.unhcr.org/api/population/settlements.json?instance_id=" + name,
+                    type: 'GET',
+                    cache: true,
+                    success: function (set) {
+                        console.log(set);
+                        map(set)
+                    }
 
-            });
-            $.ajax({
-                url: "http://data.unhcr.org/api/population/settlements.json?instance_id=" + name,
-                type: 'GET',
-                cache: true,
-                success: function (set) {
-                    console.log(set);
-                    map(set)
-                }
+                });
+
+                $.ajax({
+                    url: "http://data.un.org/Data.aspx?d=UNHCR&f=indID%3AType-Ref",
+                    type: 'GET',
+                    cache: true,
+                    success: function (set) {
+                        console.log(set);
+                       
+                    }
+
+                });
+                $("#set-map").show();
+                $("#tabled").show();
+                $("#map-a").show();
+                $("#map-s").show();
+                
 
             });
 
         });
+
+       
        
     </script>

@@ -8,21 +8,27 @@
 }
 
 #map-s{
-    height: 800px;
-    width: 800px;
+    height: 500px;
+    width: 600px;
+    display: none;
+     margin-right:20px;
 }
 
 #map-a{
-    height: 800px;
-    width: 800px;
+    height: 500px;
+    width: 600px;
+    display: none;
 }
 
 #set-map{
-    height: 700px;
-    width: 800px;
+    height:500px;
+    width: 600px;
+     display: none;
+     margin-right:20px;
 }
 
-#table_div{
-    height: 500px;
-    width: 800px;
+#tabled{
+    height: 375px;
+    width: 600px;
+     display: none;
 }
