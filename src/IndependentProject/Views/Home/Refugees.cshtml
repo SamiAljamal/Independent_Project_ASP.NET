@@ -21,15 +21,26 @@
     <input type="submit" value="send" />
 </form>
 
-    <div id="map-s"></div>
-    <div id="map-a"></div>
+
+    
+<table class="columns">
+    <tr>
+        <td><div id="set-map"></div></td>
+        <td><div id="table_div"></div></td>
+    </tr>
+    <tr>
+        <td><div id="map-s"></div></td>
+        <td><div id="map-a"></div></td>
+    </tr>
+</table>
+   
 
     <script>
         
         function charts(data)
         {
             var jsonData = data;
-            google.charts.load('current', { 'packages': ['corechart','bar'] });
+            google.charts.load("visualization", "1", { packages: ["corechart", "bar"] });
             google.charts.setOnLoadCallback(drawPie);
             google.charts.setOnLoadCallback(drawBar);
             function drawPie() {
@@ -102,6 +113,89 @@
          
 
         }
+
+        function map(data)
+        {
+            var jsonData = data;
+            google.charts.load("visualization", "1", { packages: ["geochart", "table"] });
+            google.charts.setOnLoadCallback(drawMap);
+            google.charts.setOnLoadCallback(drawTable);
+
+            function drawMap() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('number', 'Latitude');
+                data.addColumn('number', 'Longitude');
+                data.addColumn('string', 'Name');
+                data.addColumn('number', 'Value');
+
+                var value;
+                for (i = 0; i < jsonData.length; i++) {
+                    var name = jsonData[i].name;
+                    var country = jsonData[i].country;
+                    var latitude = parseFloat(jsonData[i].latitude);
+                    var longitude = parseFloat(jsonData[i].longitude);
+                    for (j = 0; j < jsonData[i].population.length; j++) {
+
+                        if (jsonData[i].population[j] !== undefined) {
+                           value= parseInt(jsonData[i].population[j].value)
+
+                        }
+                    }
+                    data.addRows([[latitude, longitude, name, value]]);
+                    value = 0;
+                }
+                var mapZoom;
+                if ($("#name").val() === "syria")
+                {
+                    mapZoom = '145';
+
+                }
+                else {
+                    mapZoom ='002'
+
+                }
+                var options = {
+                    displayMode: 'markers',
+                    region: mapZoom,
+                    colorAxis: {colors: ['green', 'blue']}
+                };
+                var map = new google.visualization.GeoChart(document.getElementById('set-map'));
+                map.draw(data, options);
+
+            }
+            function drawTable() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Refugee Camp');
+                data.addColumn('string', 'Country');
+                data.addColumn('number', 'Population');
+                data.addColumn('string', 'Last update');
+                data.addColumn('string', 'Website');
+                var value;
+                var url;
+                var update;
+                for (i = 0; i < jsonData.length; i++) {
+                    var name = jsonData[i].name;
+                    var country = jsonData[i].country;
+                    for (j = 0; j < jsonData[i].population.length; j++) {
+
+                        if (jsonData[i].population[j] !== undefined) {
+                            value = parseInt(jsonData[i].population[j].value)
+                            url = jsonData[i].population[j].url;
+                            update = jsonData[i].population[j].updated_at;
+                        }
+                    }
+                    data.addRows([[name,country,value,update,url]]);
+                    value = 0;
+                    url = "";
+                    update = "";
+                }
+                var tabs = new google.visualization.Table(document.getElementById('table_div'));
+
+                tabs.draw(data, { showRowNumber: true, width: '100%', height: '100%' });
+
+            }
+            
+        }
        
 
         $('.results').submit(function (event) {
@@ -117,6 +211,16 @@
                     charts(res);
                    
                     console.log(res);
+                }
+
+            });
+            $.ajax({
+                url: "http://data.unhcr.org/api/population/settlements.json?instance_id=" + name,
+                type: 'GET',
+                cache: true,
+                success: function (set) {
+                    console.log(set);
+                    map(set)
                 }
 
             });
