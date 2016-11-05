@@ -46,6 +46,7 @@ namespace IndependentProject.Controllers
 
         }
 
+
         public IActionResult settlementResult(string name, string instance_id)
         {
             var client = new RestClient("http://data.unhcr.org/api");
@@ -59,30 +60,25 @@ namespace IndependentProject.Controllers
             ViewBag.result = jsonResponse;
             return View();
         }
-        //public IActionResult Refugees()
-        //{
-        //    var client = new RestClient("http://data.unhcr.org/api");
-        //    var request = new RestRequest("/population/settlements.json");
+        public IActionResult Countries()
+        {
+           var client = new RestClient("http://data.unhcr.org/api");
+           var request = new RestRequest("/population/settlements.json");
 
-        //    var response = new RestResponse();
-        //    Task.Run(async () =>
-        //    {
-        //        response = await GetResponseContentAsync(client, request) as RestResponse;
-        //    }).Wait();
-        //    var jsonResponse = JsonConvert.DeserializeObject<JArray>(response.Content);
-        //    ViewBag.Settlements = jsonResponse;
-        //    ViewBag.FirstSettlementPop = jsonResponse.SelectToken("[0].population[0].demography");
-
-
+           var response = new RestResponse();
+           Task.Run(async () =>
+           {
+               response = await GetResponseContentAsync(client, request) as RestResponse;
+           }).Wait();
+           var jsonResponse = JsonConvert.DeserializeObject<JArray>(response.Content);
+           ViewBag.Settlements = jsonResponse;
+           ViewBag.FirstSettlementPop = jsonResponse.SelectToken("[0].population[0].demography");
 
 
+           return View();
 
 
-        //    return View();
-
-
-
-        //}
+        }
 
     }
 }

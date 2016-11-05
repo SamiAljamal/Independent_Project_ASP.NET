@@ -1,0 +1,63 @@
+@{
+    ViewData["Title"] = "Independent Project";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model IEnumerable<IndependentProject.Models.Settlement>
+
+<h2>Refugee Population by Country</h2>
+
+<div id="map"></div>
+
+<script>
+
+ 
+
+      function drawRegionsMap(data) {
+        
+        var jsonData=data;
+        console.log(jsonData)
+
+        var data = new google.visualization.DataTable();
+          data.addColumn('string','Country');
+          data.addColumn('number','Refugees');
+
+          for (i=0; i<jsonData.length; i++){
+            var name= jsonData[i].country_of_residence_en;
+
+            if(jsonData[i].value !== null){
+
+               var refugees = parseInt(jsonData[i].value)
+
+            }
+            else{
+              var refugges = 0;
+            }
+
+           
+
+            data.addRows([[name,refugees]])
+          }
+          console.log(name);
+ 
+
+        var options = {};
+
+        var chart = new google.visualization.GeoChart(document.getElementById('map'));
+
+        chart.draw(data, options);
+      }
+
+  $(document).ready(function(){
+     google.charts.load("visualization", "1", { packages: ["geochart"] });
+     google.charts.setOnLoadCallback(drawRegionsMap);
+     $.ajax({
+        url: "http://data.unhcr.org/api/stats/time_series.json?year=2013&country_of_origin=SYR&population_type_code=RF",
+        type: 'GET',
+        cache: true,
+        success: function (res) {
+            drawRegionsMap(res);
+      }
+    });
+  });
+</script>
