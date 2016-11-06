@@ -6,6 +6,24 @@
 @model IEnumerable<IndependentProject.Models.Settlement>
 
 <h2>Refugee Population by Country</h2>
+<form  class="results">
+    <select name="name" id="name">
+       @foreach(var org in ViewBag.Origin)
+       {
+           <option value="@org["origin"]">@org["origin_en"]</option>
+
+       }
+    </select>
+    <select name="year" id="year">
+        @for(int i=2000; i<2014; i++)
+        {
+            <option value=@i id="year">@i</option>
+
+        }
+    </select>
+
+    <input type="submit" value="send" />
+</form>
 
 <div id="map"></div>
 
@@ -58,6 +76,23 @@
         success: function (res) {
             drawRegionsMap(res);
       }
-    });
+     });
+     $('.results').submit(function (event) {
+         google.charts.load("visualization", "1", { packages: ["geochart", "table", "corechart", "bar"] });
+         event.preventDefault();
+         var org = $("#name").val();
+         var year = $("#year").val();
+
+         $.ajax({
+             url: "http://data.unhcr.org/api/stats/time_series.json?year=" + year + "&country_of_origin=" +org + "&population_type_code=RF",
+             type: 'GET',
+             cache: true,
+             success: function (res) {
+                 drawRegionsMap(res);
+             }
+
+         });
+     });
+
   });
 </script>

@@ -63,7 +63,7 @@ namespace IndependentProject.Controllers
         public IActionResult Countries()
         {
            var client = new RestClient("http://data.unhcr.org/api");
-           var request = new RestRequest("/population/settlements.json");
+           var request = new RestRequest("/stats/origin.json");
 
            var response = new RestResponse();
            Task.Run(async () =>
@@ -71,8 +71,7 @@ namespace IndependentProject.Controllers
                response = await GetResponseContentAsync(client, request) as RestResponse;
            }).Wait();
            var jsonResponse = JsonConvert.DeserializeObject<JArray>(response.Content);
-           ViewBag.Settlements = jsonResponse;
-           ViewBag.FirstSettlementPop = jsonResponse.SelectToken("[0].population[0].demography");
+           ViewBag.Origin = jsonResponse;
 
 
            return View();
