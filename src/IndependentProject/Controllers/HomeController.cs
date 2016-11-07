@@ -79,5 +79,10 @@ namespace IndependentProject.Controllers
 
         }
 
+        public IActionResult tryout()
+        {
+            return View();
+        }
+
     }
 }

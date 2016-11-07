@@ -14,13 +14,7 @@
 
        }
     </select>
-    <select name="year" id="year">
-        @for(int i=2000; i<2014; i++)
-        {
-            <option value=@i id="year">@i</option>
-
-        }
-    </select>
+   
 
     <input type="submit" value="send" />
 </form>
@@ -33,8 +27,8 @@
 
       function drawRegionsMap(data) {
         
-        var jsonData=data;
-        console.log(jsonData)
+          var jsonData = data;
+          console.log(jsonData);
 
         var data = new google.visualization.DataTable();
           data.addColumn('string','Country');
@@ -56,7 +50,7 @@
 
             data.addRows([[name,refugees]])
           }
-          console.log(name);
+  
  
 
         var options = {};
@@ -80,19 +74,29 @@
      $('.results').submit(function (event) {
          google.charts.load("visualization", "1", { packages: ["geochart", "table", "corechart", "bar"] });
          event.preventDefault();
+         var year = 2000
+         var data = [];
          var org = $("#name").val();
-         var year = $("#year").val();
 
-         $.ajax({
-             url: "http://data.unhcr.org/api/stats/time_series.json?year=" + year + "&country_of_origin=" +org + "&population_type_code=RF",
-             type: 'GET',
-             cache: true,
-             success: function (res) {
-                 drawRegionsMap(res);
-             }
+         for (var i = 2000; i < 2013; i++) {
+             $.ajax({
+                 url: "http://data.unhcr.org/api/stats/time_series.json?year="+ i +"&country_of_origin=" + org + "&population_type_code=RF",
+                 type: 'GET',
+                 cache: true,
+                 success: function (res) {
+                     data.push(res).toList().sort();
+                 }
+             });
+            
+         }
+         console.log(data);
+         drawRegionsMap(data);
 
-         });
+
+       
+       
      });
+
 
   });
 </script>

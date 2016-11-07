@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .active {
+            fill: blue !important;
+        }
+        /*.datamaps-key dt, .datamaps-key dd {float: none !important;}
+          .datamaps-key {right: -50px; top: 0;}*/
+    </style>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+    <script src="http://datamaps.github.io/scripts/0.4.5/datamaps.world.min.js"></script>
+</head>
+<body>
+
+    <div id="container1" style="border:1px dotted blue; width: 700px; height: 475px; position: relative;"></div>
+    
+    <script>
+
+        function drawMap(data) {
+            var jsonData = data;
+            console.log(jsonData);
+
+        };
+        // Mix and match ways to specify how arcs are drawn
+        var series = [];
+        d3.json("http://data.unhcr.org/api/stats/time_series.json?year=2013&country_of_origin=AFG&population_type_code=RF", function (d) {
+            for (var key in d) {
+                var obj = d[key];
+                if (obj.value != null) {
+                    series.push([obj.country_of_residence, parseInt(obj.value)]);
+                }
+            }
+    
+       });
+        console.log(onlyValues);
+
+        var onlyValues = series.map(function (obj) { return obj[1]; });
+ 
+
+    
+  
+       var map = new Datamap({
+           element: document.getElementById("container1"),
+           geographyConfig: {
+               popupTemplate: function(geography, data) {
+                   return "<div class='hoverinfo'>" + geography.properties.name +  
+                   "Electoral Votes:" +  data.refugees + ""
+               },
+               highlightBorderWidth: 3
+           },
+           projection: 'mercator',
+           data: series   
+       });
+d3.json("http://data.unhcr.org/api/stats/time_series.json?year=2012&country_of_origin=AFG&population_type_code=RF", function (d) {
+    var arcs = [];
+    var data = [];
+
+
+    var colors = d3.scale.category10();
+
+    for (var key in d) {
+        var obj = d[key];
+        if (obj.value < 500) {
+            arcs.push({
+                origin: obj.country_of_origin,
+                destination: obj.country_of_residence,
+                options:{
+                    strokeWidth: .5
+                } // tack on options for each one
+            });
+        }
+        else if (obj.value < 5000) {
+            arcs.push({
+                origin: obj.country_of_origin,
+                destination: obj.country_of_residence,
+                options: {
+                    popupOnHover: true,
+                    strokeWidth: 2
+                } // tack on options for each one
+            });
+        }
+
+        else if (obj.value < 50000) {
+            arcs.push({
+                origin: obj.country_of_origin,
+                destination: obj.country_of_residence,
+                options: {
+                    strokeWidth: 5
+                } // tack on options for each one
+            });
+        }
+            
+        else if (obj.value < 150000) {
+            arcs.push({
+                origin: obj.country_of_origin,
+                destination: obj.country_of_residence,
+                options: {
+                    strokeWidth: 7
+                } // tack on options for each one
+            });
+        }
+
+        else {
+            arcs.push({
+                origin: obj.country_of_origin,
+                destination: obj.country_of_residence,
+                options: {
+                    strokeWidth: 12
+                } // tack on options for each one
+            });
+
+        }
+       
+        map.arc(arcs);
+
+
+
+    }
+});
+
+        
+
+    </script>
+</body>
+</html>
