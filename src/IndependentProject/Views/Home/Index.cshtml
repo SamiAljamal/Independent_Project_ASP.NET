@@ -2,298 +2,63 @@
     ViewData["Title"] = "Independent Project";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<html>
-<head>
-    <title> Independent Projectt</title>
-</head>
-<body>
-    @model IndependentProject.Models.Settlement
+  @model IndependentProject.Models.Settlement
+
    
     <div id="map-canvas"></div>
     <div id="title"></div>
     <script>
-        $(document).ready(function () {
-            var map;
-            var map2;
 
-            function initialize() {
+      
+   d3.csv("https://gist.githubusercontent.com/SamiAljamal/fa10672fd0f01f8199caa6f2f50431bc/raw/50edc161262b02c4f2ebd2470251f151c7cdf9f8/unhcr_2014_data",function(d){
+       var dataset = [];
+       var onlyValues =[];
 
-                var mapProp = {
-                    center: new google.maps.LatLng(0, 0),
-                    zoom: 2,
-                    styles: [
-            {
-                "featureType": "all",
-                "elementType": "labels",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    },
-                    {
-                        "lightness": 37
-                    }
-                ]
-            },
-            {
-                "featureType": "administrative",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    },
-                    {
-                        "hue": "#454440"
-                    },
-                    {
-                        "saturation": -76
-                    },
-                    {
-                        "lightness": 43
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape.man_made",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape.natural",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "landscape.natural.landcover",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "poi",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "poi",
-                "elementType": "labels",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    },
-                    {
-                        "lightness": 30
-                    }
-                ]
-            },
-            {
-                "featureType": "poi.medical",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "poi.park",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    },
-                    {
-                        "hue": "#50a10f"
-                    }
-                ]
-            },
-            {
-                "featureType": "poi.school",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    }
-                ]
-            },
-            {
-                "featureType": "road",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "road",
-                "elementType": "labels",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    },
-                    {
-                        "hue": "#b8ab97"
-                    },
-                    {
-                        "lightness": 29
-                    }
-                ]
-            },
-            {
-                "featureType": "transit",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "transit",
-                "elementType": "labels",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    },
-                    {
-                        "lightness": 27
-                    }
-                ]
-            },
-            {
-                "featureType": "transit",
-                "elementType": "labels.text.stroke",
-                "stylers": [
-                    {
-                        "visibility": "off"
-                    }
-                ]
-            },
-            {
-                "featureType": "water",
-                "elementType": "all",
-                "stylers": [
-                    {
-                        "visibility": "on"
-                    },
-                    {
-                        "color": "#c3c3c3"
-                    },
-                    {
-                        "lightness": 13
-                    }
-                ]
-            }
-                    ]
-                };
+     var map = new Datamap({ 
+        element: document.getElementById("map-canvas"),
+        projection: 'mercator',
+        geographyConfig: {
+        popupOnHover: false,
+        highlightOnHover: false
+    },
+        fills: {
+            defaultFill: '#dddddd',
+            'other': 'red'
+        }
+       
+        
+    });
+           
+       Object.keys(d).map(function(key){
+           onlyValues.push(parseInt(d[key]["refugees"]))
+       });
+       console.log(onlyValues);
+       var minValue = Math.min.apply(null, onlyValues);
+        var maxValue = Math.max.apply(null, onlyValues);
 
-                var infoWindow = new google.maps.InfoWindow({
-                    content: ""
-                });
+         var sizeScale = d3.scale.linear()
+              .domain([minValue, maxValue])
+              .range([10, 45]);
 
+              Object.keys(d).forEach(function(key){
+                  var refugees= parseInt(d[key]["refugees"]);
+                  dataset.push(
+                      {
+                          country: d[key]["Origin"],
+                          centered: d[key]["country_code"],
+                          fillKey: "other",
+                          population: refugees,
+                          radius: sizeScale(refugees)
+                      }
+                  )
+              });
+       map.bubbles(dataset, {
+        popupTemplate:function (geography, data) { 
+             return ['<div class="hoverinfo"><strong>' +  data.country + '</strong>',
+            '<br/>Refugees: ' +  data.population +
+            '</div>'].join('');
+    }
+});
 
-                map = new google.maps.Map(document.getElementById("map-canvas"), mapProp);
-
-                var countryLayer = new google.maps.Data();
-                countryLayer.loadGeoJson('https://gist.githubusercontent.com/SamiAljamal/d3d7e1851bb973dfcd97d18b35a54daa/raw/c51eb1cf5845008b73c779b9c3ad44ccdc0d715e/SyrianRefugees.Json');
-                countryLayer.setStyle(function (feature) {
-                    return {
-                        fillColor: getColor(feature.getProperty('refugees')),
-                        fillOpacity: 1,
-                        strokeColor: 'white',
-                        strokeWeight: .5,
-                        zIndex: 1
-
-                    };
-                });
-
-                countryLayer.addListener('mouseover', function (e) {
-                    countryLayer.overrideStyle(e.feature, {
-                        strokeColor: 'white',
-                        strokeWeight: 2,
-                        zIndex: 2
-                    });
-                });
-
-                countryLayer.addListener('mouseout', function (e) {
-                    countryLayer.revertStyle();
-                });
-
-                countryLayer.addListener('click', function (e) {
-                    console.log(e);
-                    infoWindow.setContent('<div style="line-height:1.00;overflow:hidden;white-space:nowrap;">' +
-                      e.feature.getProperty('name') + '<br> Syrian Refugees: ' +
-                       e.feature.getProperty('refugees') + '</div>');
-
-                    var anchor = new google.maps.MVCObject();
-                    anchor.set("position", e.latLng);
-                    infoWindow.open(map, anchor);
-                });
-
-
-                countryLayer.setMap(map);
-
-                function getColor(refugees) {
-                    var colors = [
-                      '#969696',
-                      '#bdd7e7',
-                      '#6baed6',
-                      '#3182bd',
-                      '#08519c',
-                    ];
-
-                    return refugees >= 250000 ? colors[4] :
-                      refugees > 50000 ? colors[3] :
-                      refugees > 1000 ? colors[2] :
-                      refugees > 1 ? colors[1] :
-                      colors[0];
-                }
-
-
-
-                var title = document.getElementById('title');
-                var div = document.createElement('div');
-                div.innerHTML = '<h1> Refugee Crises</h1>';
-                title.appendChild(div);
-
-                map.controls[google.maps.ControlPosition.TOP_CENTER].push(title);
-
-
-
-            }
-
-
-            google.maps.event.addDomListener(window, 'load', initialize);
-
-
-
-
-
-        });
+   });
     </script>
-</body>
-</html>
