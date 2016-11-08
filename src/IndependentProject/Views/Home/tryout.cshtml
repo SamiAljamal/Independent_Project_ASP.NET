@@ -1,127 +1,129 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        .active {
-            fill: blue !important;
-        }
-        /*.datamaps-key dt, .datamaps-key dd {float: none !important;}
-          .datamaps-key {right: -50px; top: 0;}*/
-    </style>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
-    <script src="http://datamaps.github.io/scripts/0.4.5/datamaps.world.min.js"></script>
-</head>
-<body>
+﻿@{
+    ViewData["Title"] = "Independent Project";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-    <div id="container1" style="border:1px dotted blue; width: 700px; height: 475px; position: relative;"></div>
+@model IEnumerable<IndependentProject.Models.Settlement>
+<form class="results">
+    <select name="name" id="name">
+        @foreach (var org in ViewBag.Origin)
+        {
+            <option value="@org["origin"]">@org["origin_en"]</option>
+
+        }
+    </select>
+
+
+    <input type="submit" value="send" />
+</form>
+
+
+    <div id="container1" style="position: relative; width: 1000px; height: 900px;"></div>
     
     <script>
 
         // Mix and match ways to specify how arcs are drawn
- 
+        var jsonData = "http://data.unhcr.org/api/stats/time_series.json?year=2013&country_of_origin=" + $("name").val() + "SYR&population_type_code=RF";
  function drawArc(){
 
-      var map = new Datamap({
-           element: document.getElementById("container1"),
-           projection: 'mercator',
-           fills: {
-      defaultFill: "#cccccc",
-      q0: "rgb(215,25,28)",
-      q1: "rgb(253,174,97)",
-      q2: "rgb(255,255,191)",
-      q3: "rgb(171,217,233)",
-      q4: "rgb(44,123,182)",
-    },
-             
-       });
-
-
-d3.json("http://data.unhcr.org/api/stats/time_series.json?year=2000&country_of_origin=IRQ&population_type_code=RF", function (d) {
-    var arcs = [];
-
-    var colors = d3.scale.category10();
-
-    for (var key in d) {
-        var obj = d[key];
-        if (obj.value < 500) {
-            arcs.push({
-                origin: obj.country_of_origin,
-                destination: obj.country_of_residence,
-                options:{
-                    strokeColor: "rgb(215,25,28)",
-                    strokeWidth: 1
-                } // tack on options for each one
-            });
-        }
-        else if (obj.value < 5000) {
-            arcs.push({
-                origin: obj.country_of_origin,
-                destination: obj.country_of_residence,
-                options: {
-                    popupOnHover: true,
-                    strokeColor: "rgb(253,174,97)",
-                    strokeWidth:1.5
-                } // tack on options for each one
-            });
-        }
-
-        else if (obj.value < 50000) {
-            arcs.push({
-                origin: obj.country_of_origin,
-                destination: obj.country_of_residence,
-                options: {
-                    strokeColor:"rgb(255,255,191)",
-                    strokeWidth:2
-                } // tack on options for each one
-            });
-        }
-            
-        else if (obj.value < 150000) {
-            arcs.push({
-                origin: obj.country_of_origin,
-                destination: obj.country_of_residence,
-                options: {
-                    strokeColor: "rgb(171,217,233)",
-                    strokeWidth:2.5
-                } // tack on options for each one
-            });
-        }
-
-        else {
-            arcs.push({
-                origin: obj.country_of_origin,
-                destination: obj.country_of_residence,
-                options: {
-                    strokeColor: "rgb(44,123,182)",
-                    strokeWidth:3
-                } // tack on options for each one
-            });
-
-        }
-       
-        map.arc(arcs);
-
-        map.legend({
-            legendTitle: "Refugee Migration",
-            labels:{
-                q0: "<500",
-                q1: "<5000",
-                q2: "<50000",
-                q3: "<150000",
-                q4: "150000+",
-            }
-        });
-
-    }
-});
      
+     
+
+      d3.json("http://data.unhcr.org/api/stats/time_series.json?year=2013&country_of_origin="+$("#name").val() +"&population_type_code=RF", function (d) {
+          var dataset = {};
+          var onlyValues = [];
+           Object.keys(d).map(function (key) {
+              if (d[key]["value"] === null) {
+                  onlyValues.push(0);
+              }
+              else {
+                  onlyValues.push(parseInt(d[key]["value"]));
+
+              }
+          });
+          console.log(onlyValues);
+          var minValue = Math.min.apply(null, onlyValues);
+          var maxValue = Math.max.apply(null, onlyValues);
+          console.log(minValue);
+          console.log(maxValue);
+          var paletteScale = d3.scale.linear()
+              .domain([minValue, maxValue])
+              .range(["#EFEFFF", "#02386f"]);
+
+          Object.keys(d).forEach(function (key) {
+              var refugees;
+              var iso = d[key]["country_of_residence"];
+              if (d[key]["value"]) {
+                  refugees = parseInt(d[key]["value"]);
+              }
+              else {
+                  refugees = 0
+
+              }
+              dataset[iso] = { Refugees: refugees, fillColor: paletteScale(refugees) };
+          });
+          console.log(dataset);
+   
+
+    
+    var map = new Datamap({
+        
+        element: document.getElementById("container1"),
+        projection: 'mercator',
+        fills: { defaultFill: '#F5F5F5' },
+        data: dataset,
+        geographyConfig: {
+            popupTemplate: function (geo, data) {
+                if (!data) { return; }
+                return ['<div class="hoverinfo">',
+                    '<strong>', geo.properties.name, '</strong>',
+                    '<br>Total Refugees:<strong>', data.Refugees, '</strong>',
+                    '</div>'].join('');
+
+            }
+
+        }
+
+    });
+
+   map.legend({legendTitle: "map legend",labels:{paletteScale}})
+   var arcs = [];
+
+
+
+
+   for (var key in d) {
+        var obj = d[key];
+        if (obj.value != null) {
+            arcs.push({
+                origin: obj.country_of_origin,
+                destination: obj.country_of_residence,
+                options: {
+                    strokeColor: "blue",
+                    strokeWidth: .5
+                } // tack on options for each one
+            });
+        }   
+        map.arc(arcs);
+   }
+
+  
+});
+      
  }
 
- drawArc();
+ $(document).ready(function () {
+     drawArc();
+     $("#results").submit(function (event) {
+         drawArc();
+         event.preventDefult();
+
+
+     })
+
+ });
+
 
       
 
     </script>
-</body>
-</html>

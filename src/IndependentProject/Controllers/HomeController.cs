@@ -80,7 +80,19 @@ namespace IndependentProject.Controllers
         }
 
         public IActionResult tryout()
+
         {
+            var client = new RestClient("http://data.unhcr.org/api");
+            var request = new RestRequest("/stats/origin.json");
+
+            var response = new RestResponse();
+            Task.Run(async () =>
+            {
+                response = await GetResponseContentAsync(client, request) as RestResponse;
+            }).Wait();
+            var jsonResponse = JsonConvert.DeserializeObject<JArray>(response.Content);
+            ViewBag.Origin = jsonResponse;
+
             return View();
         }
 

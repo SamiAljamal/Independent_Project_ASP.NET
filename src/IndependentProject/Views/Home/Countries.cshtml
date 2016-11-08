@@ -23,7 +23,7 @@
 
 <script>
 
- 
+  
 
       function drawRegionsMap(data) {
         
@@ -75,20 +75,16 @@
          google.charts.load("visualization", "1", { packages: ["geochart", "table", "corechart", "bar"] });
          event.preventDefault();
          var year = 2000
-         var data = [];
          var org = $("#name").val();
-
-         for (var i = 2000; i < 2013; i++) {
-             $.ajax({
-                 url: "http://data.unhcr.org/api/stats/time_series.json?year="+ i +"&country_of_origin=" + org + "&population_type_code=RF",
-                 type: 'GET',
-                 cache: true,
-                 success: function (res) {
-                     data.push(res);
-                 }
-             });
-            
-         }
+         $.ajax({
+             url: "http://data.unhcr.org/api/stats/time_series.json?year=2013&country_of_origin=" + org + "&population_type_code=RF",
+             type: 'GET',
+             cache: true,
+             success: function (res) {
+                 drawRegionsMap(res);
+             }
+         });
+        
          console.log(data);
          drawRegionsMap(data);
 
