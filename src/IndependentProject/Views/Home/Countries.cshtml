@@ -20,11 +20,13 @@
 </form>
 
 <div id="map"></div>
+<div id="line_div"></div>
 
 <script>
 
   
-
+        google.charts.setOnLoadCallback(drawRegionsMap);
+         google.charts.setOnLoadCallback(drawLine);
       function drawRegionsMap(data) {
         
           var jsonData = data;
@@ -60,6 +62,182 @@
         chart.draw(data, options);
       }
 
+      function drawLine(data){
+          var jsonData=data;
+          var refData=[];
+          var dataset=[];
+          var year0=[],year1=[],year2=[],year3=[],year4=[],year5=[],year6=[],year7=[],year8=[],year9=[],year10=[],year11=[],year12=[],year13=[];
+
+            for(var i = 0; i<jsonData.length; i++)
+        {
+                if(jsonData[i].year === 2000){
+                if(jsonData[i].value)
+                {
+                    year0.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year0.push(0);
+                }
+                
+            }
+             if(jsonData[i].year === 2001){
+                if(jsonData[i].value)
+                {
+                    year1.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year1.push(0);
+                }
+            }
+             if(jsonData[i].year === 2002){
+                if(jsonData[i].value)
+                {
+                    year2.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year2.push(0);
+                }
+            }
+             if(jsonData[i].year === 2003){
+                if(jsonData[i].value)
+                {
+                    year3.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year3.push(0);
+                }
+            }
+             if(jsonData[i].year === 2004){
+                if(jsonData[i].value)
+                {
+                    year4.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year4.push(0);
+                }
+            }
+             if(jsonData[i].year === 2005){
+                if(jsonData[i].value)
+                {
+                    year5.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year5.push(0);
+                }
+            }
+             if(jsonData[i].year === 2006){
+                if(jsonData[i].value)
+                {
+                    year6.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year6.push(0);
+                }
+            }
+             if(jsonData[i].year === 2007){
+                if(jsonData[i].value)
+                {
+                    year7.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year7.push(0);
+                }
+            }
+             if(jsonData[i].year === 2008){
+                if(jsonData[i].value)
+                {
+                    year8.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year8.push(0);
+                }
+            }
+             if(jsonData[i].year === 2009){
+                if(jsonData[i].value)
+                {
+                    year9.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year9.push(0);
+                }
+            }
+             if(jsonData[i].year === 2010){
+                if(jsonData[i].value)
+                {
+                    year10.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year10.push(0);
+                }
+            }
+             if(jsonData[i].year === 2011){
+                if(jsonData[i].value)
+                {
+                    year11.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year11.push(0);
+                }
+            }
+             if(jsonData[i].year === 2012){
+                if(jsonData[i].value)
+                {
+                    year12.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year12.push(0);
+                }
+            }
+             if(jsonData[i].year === 2013){
+                if(jsonData[i].value)
+                {
+                    year13.push(parseInt(jsonData[i].value))
+                }
+                else{
+                    year13.push(0);
+                }
+            }       
+        }
+        dataset.push({"year":2000, "total": year0.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2001, "total": year1.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2002, "total": year2.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2003, "total": year3.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2004, "total": year4.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2005, "total": year5.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2006, "total": year6.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2007, "total": year7.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2008, "total": year8.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2009, "total": year9.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2010, "total": year10.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2011, "total": year11.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2012, "total": year12.reduce(function(x,y){return x+y},0)});
+        dataset.push({"year":2013, "total": year13.reduce(function(x,y){return x+y},0)});
+
+        var lineData= new google.visualization.DataTable();
+            lineData.addColumn('number','year');
+            lineData.addColumn('number','Refugee Population');
+            
+
+        for (var i=0; i<dataset.length; i++){
+            var year=dataset[i].year;
+            var total = dataset[i].total;
+            lineData.addRows([[year,total]]);
+      }
+       var options = {
+        hAxis: {
+            title: 'Year'
+        },
+        vAxis: {
+            title: 'Total Refugee Population'
+        }
+    }
+
+    var chart = new google.visualization.LineChart(document.getElementById('line_div'));
+
+    chart.draw(lineData, options);
+
+      }
+
   $(document).ready(function(){
      google.charts.load("visualization", "1", { packages: ["geochart"] });
      google.charts.setOnLoadCallback(drawRegionsMap);
@@ -72,7 +250,7 @@
       }
      });
      $('.results').submit(function (event) {
-         google.charts.load("visualization", "1", { packages: ["geochart", "table", "corechart", "bar"] });
+         google.charts.load("visualization", "1", { packages: ["geochart", "table", "corechart", "bar","line"] });
          event.preventDefault();
          var year = 2000
          var org = $("#name").val();
@@ -84,12 +262,19 @@
                  drawRegionsMap(res);
              }
          });
+
+          $.ajax({
+             url: "http://data.unhcr.org/api/stats/time_series_all_years.json?population_type_code=RF&country_of_origin=" + org +"",
+             type: 'GET',
+             cache: true,
+             success: function (res) {
+                 drawLine(res);
+             }
+         });
+
+
         
-         console.log(data);
-         drawRegionsMap(data);
-
-
-       
+         
        
      });
 
