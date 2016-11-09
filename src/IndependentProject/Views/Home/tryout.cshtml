@@ -4,6 +4,7 @@
 }
 
 @model IEnumerable<IndependentProject.Models.Settlement>
+
 <form class="results">
     <select name="name" id="name">
         @foreach (var org in ViewBag.Origin)
@@ -112,16 +113,6 @@
       
  }
 
- $(document).ready(function () {
-     drawArc();
-     $("#results").submit(function (event) {
-         drawArc();
-         event.preventDefult();
-
-
-     })
-
- });
 
 
       

@@ -118,6 +118,13 @@
         
         function charts(data)
         {
+
+            var options = {
+                animation: {
+                    duration: 1500,
+                    startup: true
+                }
+            }
             var jsonData = data;
             google.charts.setOnLoadCallback(drawPie);
             google.charts.setOnLoadCallback(drawBar);
@@ -135,7 +142,7 @@
                 }
                 
                    var chart = new google.visualization.PieChart(document.getElementById('map-s'));
-                chart.draw(data);
+                   chart.draw(data, { animation: { startup: true }});
             }
             function drawBar() {
                 var data = new google.visualization.DataTable();
@@ -184,7 +191,7 @@
 
                 }
                 var chart = new google.charts.Bar(document.getElementById('map-a'));
-                chart.draw(data);
+                chart.draw(data, { animation: { startup: true } });
             }
 
         }
@@ -229,11 +236,7 @@
                     }
 
                 });
-                $("#set-map").show();
-                $("#tabled").show();
-                $("#map-a").show();
-                $("#map-s").show();
-                
+       
             });
         });
 
