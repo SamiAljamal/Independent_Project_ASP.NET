@@ -114,7 +114,7 @@
                         }
                     }
 
-                    data1.addRows([[name1, country1, value1, update, url]]);
+                    data1.addRows([[name1, country1, value1, update,url]]);
                     value = 0;
                     url = "";
                     update = "";
@@ -235,7 +235,6 @@
                     cache: true,
                     success: function (res) {
                         charts(res);
-                        console.log(res);
                     }
 
                 });
@@ -244,10 +243,8 @@
                     type: 'GET',
                     cache: true,
                     success: function (set) {
-                        console.log(set);
                         map(set)
                     }
-
                 });
 
                 $.ajax({
@@ -255,8 +252,7 @@
                     type: 'GET',
                     cache: true,
                     success: function (set) {
-                        console.log(set);
-                       
+                     
                     }
 
                 });
