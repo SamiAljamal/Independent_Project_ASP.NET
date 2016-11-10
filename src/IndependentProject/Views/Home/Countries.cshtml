@@ -14,6 +14,18 @@
 
        }
     </select>
+    <select name="year" id="year">
+       @for(var i = 2000; i<2014; i++)
+       {
+           <option value = @i> @i </option>
+
+       }
+    </select>
+    <select name="ref" id="ref">
+        <option value ="RF">Refugees</option>
+        <option value ="AS">Assylum Seekers</option>
+
+    </select>
    
 
     <input type="submit" value="send" />
@@ -21,12 +33,13 @@
 
 <div id="map"></div>
 <div id="line_div"></div>
+<div id="sankey" style="width: 600px; height: 900px;"></div>
 
 <script>
 
-  
         google.charts.setOnLoadCallback(drawRegionsMap);
          google.charts.setOnLoadCallback(drawLine);
+         
       function drawRegionsMap(data) {
         
           var jsonData = data;
@@ -214,14 +227,14 @@
         dataset.push({"year":2013, "total": year13.reduce(function(x,y){return x+y},0)});
 
         var lineData= new google.visualization.DataTable();
-            lineData.addColumn('number','year');
+            lineData.addColumn('date','year');
             lineData.addColumn('number','Refugee Population');
             
 
         for (var i=0; i<dataset.length; i++){
-            var year=dataset[i].year;
+            var year= dataset[i].year;
             var total = dataset[i].total;
-            lineData.addRows([[year,total]]);
+            lineData.addRows([[new Date(year,11,31),total]]);
       }
        var options = {
         hAxis: {
@@ -238,24 +251,19 @@
 
       }
 
+
   $(document).ready(function(){
      google.charts.load("visualization", "1", { packages: ["geochart"] });
      google.charts.setOnLoadCallback(drawRegionsMap);
-     $.ajax({
-        url: "http://data.unhcr.org/api/stats/time_series.json?year=2013&country_of_origin=SYR&population_type_code=RF",
-        type: 'GET',
-        cache: true,
-        success: function (res) {
-            drawRegionsMap(res);
-      }
-     });
      $('.results').submit(function (event) {
-         google.charts.load("visualization", "1", { packages: ["geochart", "table", "corechart", "bar","line"] });
+         google.charts.load("visualization", "1", { packages: ["geochart", "table", "corechart", "bar","line",'sankey'] });
          event.preventDefault();
-         var year = 2000
          var org = $("#name").val();
+         var popType= $("#ref").val();
+         var year= $("#year").val(); 
+
          $.ajax({
-             url: "http://data.unhcr.org/api/stats/time_series.json?year=2013&country_of_origin=" + org + "&population_type_code=RF",
+             url: "http://data.unhcr.org/api/stats/time_series.json?year="+ year +"&country_of_origin=" + org + "&population_type_code=" + popType + "",
              type: 'GET',
              cache: true,
              success: function (res) {
@@ -272,10 +280,6 @@
              }
          });
 
-
-        
-         
-       
      });
 
 
