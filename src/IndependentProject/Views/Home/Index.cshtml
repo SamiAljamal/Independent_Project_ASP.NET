@@ -2,10 +2,37 @@
     ViewData["Title"] = "Independent Project";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-  @model IndependentProject.Models.Settlement
 
+<style>
    
-    <div id="map-canvas"></div>
+
+    .text{
+    top:100px;
+    left: 200px;
+    position: absolute;
+    font-size: 55px;
+    }
+    .hello{
+    top:200px;
+    left: 200px;
+    position: absolute;
+    text-align: justify;
+    margin-right: 45%;
+    }
+    .legend{
+
+    }
+
+</style>
+   
+    <div id="map-canvas" style="opacity: 0.8;">
+        <h1 class="text">Refugee Awareness: Visualizing the crisis</h1>
+            <h4 class="hello">
+                By the end of 2015, a record high of 65.3 million individuals were forcibly displaced from their homes as a result of persecution, conflict, generalized violence, or human rights violations. When they cross international borders, they are called refugees. Refugee Awareness goal is to provide a narrative of refugee migration via data visualization. The information provided is based on data published by the <strong>United Nations Refugee Agency (UNHCR).</strong> The bubbles displayed on this map symbolize current countries with a significant displaced population.
+            </h4>
+        
+
+    </div>
     <div id="title"></div>
     <script>
 
@@ -22,7 +49,7 @@
         highlightOnHover: false
     },
         fills: {
-            defaultFill: '#dddddd',
+            defaultFill: '#f2f2f2',
             'other': 'red'
         }
        
@@ -57,8 +84,8 @@
              return ['<div class="hoverinfo"><strong>' +  data.country + '</strong>',
             '<br/>Refugees: ' +  data.population +
             '</div>'].join('');
-    }
-});
-
+        }
+   
+       });
    });
     </script>

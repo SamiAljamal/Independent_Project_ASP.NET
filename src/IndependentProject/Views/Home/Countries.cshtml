@@ -6,7 +6,9 @@
 @model IEnumerable<IndependentProject.Models.Settlement>
 
 <h2>Refugee Population by Country</h2>
+<h4>Select Country, year, and type to display data on refugees from a specific country.</h4>
 <form  class="results">
+    <label>Country</label>
     <select name="name" id="name">
        @foreach(var org in ViewBag.Origin)
        {
@@ -14,13 +16,16 @@
 
        }
     </select>
+    <label>Year</label>
     <select name="year" id="year">
+       
        @for(var i = 2000; i<2014; i++)
        {
            <option value = @i> @i </option>
 
        }
     </select>
+    <label>Population Type</label>
     <select name="ref" id="ref">
         <option value ="RF">Refugees</option>
         <option value ="AS">Assylum Seekers</option>
@@ -28,12 +33,12 @@
     </select>
    
 
-    <input type="submit" value="send" />
+    <input type="submit" value="See Results" />
 </form>
-
-<div id="map"></div>
+<div></div>
 <div id="line_div"></div>
-<div id="sankey" style="width: 600px; height: 900px;"></div>
+<div id="map"></div>
+
 
 <script>
 
@@ -48,17 +53,17 @@
         var data = new google.visualization.DataTable();
           data.addColumn('string','Country');
           data.addColumn('number','Refugees');
-
+          var refugees;
           for (i=0; i<jsonData.length; i++){
             var name= jsonData[i].country_of_residence_en;
 
             if(jsonData[i].value !== null){
 
-               var refugees = parseInt(jsonData[i].value)
+              refugees = parseInt(jsonData[i].value)
 
             }
             else{
-              var refugges = 0;
+               refugees = 0;
             }
 
            
@@ -68,7 +73,10 @@
   
  
 
-        var options = {};
+          var options = {
+              colors: ['#eff3ff', '#bdd7e7', '#6baed6', '#2171b5'],
+              title: "Refugee Camps",
+        };
 
         var chart = new google.visualization.GeoChart(document.getElementById('map'));
 
@@ -236,7 +244,8 @@
             var total = dataset[i].total;
             lineData.addRows([[new Date(year,11,31),total]]);
       }
-       var options = {
+        var options = {
+            title: 'Refugee Timeline',
         hAxis: {
             title: 'Year'
         },
@@ -272,7 +281,7 @@
          });
 
           $.ajax({
-             url: "http://data.unhcr.org/api/stats/time_series_all_years.json?population_type_code=RF&country_of_origin=" + org +"",
+             url: "http://data.unhcr.org/api/stats/time_series_all_years.json?population_type_code=" + popType + "&country_of_origin=" + org +"",
              type: 'GET',
              cache: true,
              success: function (res) {

@@ -5,9 +5,10 @@
 
 @model IEnumerable<IndependentProject.Models.Settlement>
 
-<h2>UNHCR Refugee Groups </h2>
+<h2>UNHCR Refugee Situation Areas </h2>
 <hr/>
 <form action="settlementResult" class="results">
+    <label>Areas of Concern</label>
     <select name="name" id="name">
         <option value="car">Central African Republic</option>
         <option value="burundi">Burundi</option>
@@ -18,7 +19,7 @@
         <option value="syria">Syria</option>
     </select>
 
-    <input type="submit" value="send" />
+    <input type="submit" value="See Results" />
 </form>
 
 
@@ -76,8 +77,9 @@
                 }
                 var options = {
                     displayMode: 'markers',
+                    sizeAxis: { minValue: 0, maxValue: 10 },
                     region: mapZoom,
-                    colorAxis: { colors: ['green', 'blue'] }
+                    colorAxis: { colors: ['red'] }
                 };
                 var map = new google.visualization.GeoChart(document.getElementById('set-map'));
                 map.draw(data, options);
@@ -130,6 +132,10 @@
             google.charts.setOnLoadCallback(drawBar);
             function drawPie() {
                 var data = new google.visualization.DataTable();
+                var optionsPie = {
+                    title: 'Refugee population by Country',
+
+                }
                 data.addColumn('string', 'Name');
                 data.addColumn('number', 'Population');
                 
@@ -142,9 +148,10 @@
                 }
                 
                    var chart = new google.visualization.PieChart(document.getElementById('map-s'));
-                   chart.draw(data, { animation: { startup: true }});
+                   chart.draw(data,optionsPie);
             }
             function drawBar() {
+             
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'Country');
                 data.addColumn('number', "Female under 4");
@@ -190,8 +197,16 @@
                     data.addRows([[name, f04, m04, f511, m511, f1217, m1217, f1859, m1859, m60, f60]])
 
                 }
+
+                var options = {
+                    chart: {
+                        title: 'Refugee Demographics'
+                    },
+       
+                };
+               
                 var chart = new google.charts.Bar(document.getElementById('map-a'));
-                chart.draw(data, { animation: { startup: true } });
+                chart.draw(data,options);
             }
 
         }
