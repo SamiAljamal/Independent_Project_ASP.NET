@@ -271,15 +271,6 @@
          var popType= $("#ref").val();
          var year= $("#year").val(); 
 
-         $.ajax({
-             url: "http://data.unhcr.org/api/stats/time_series.json?year="+ year +"&country_of_origin=" + org + "&population_type_code=" + popType + "",
-             type: 'GET',
-             cache: true,
-             success: function (res) {
-                 drawRegionsMap(res);
-             }
-         });
-
           $.ajax({
              url: "http://data.unhcr.org/api/stats/time_series_all_years.json?population_type_code=" + popType + "&country_of_origin=" + org +"",
              type: 'GET',
@@ -287,7 +278,16 @@
              success: function (res) {
                  drawLine(res);
              }
-         });
+          });
+
+          $.ajax({
+              url: "http://data.unhcr.org/api/stats/time_series.json?year=" + year + "&country_of_origin=" + org + "&population_type_code=" + popType + "",
+              type: 'GET',
+              cache: true,
+              success: function (res) {
+                  drawRegionsMap(res);
+              }
+          });
 
      });
 

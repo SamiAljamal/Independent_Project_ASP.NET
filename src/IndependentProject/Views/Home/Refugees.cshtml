@@ -5,10 +5,20 @@
 
 @model IEnumerable<IndependentProject.Models.Settlement>
 
+<style>
+   h4{
+       top:100px;
+    left: 200px;
+    position: absolute;
+    font-size: 25px;
+    display:none;
+   }
+</style>
+
 <h2>UNHCR Refugee Situation Areas </h2>
 <hr/>
 <form action="settlementResult" class="results">
-    <label>Areas of Concern</label>
+    <label>Areas of Concern:</label>
     <select name="name" id="name">
         <option value="car">Central African Republic</option>
         <option value="burundi">Burundi</option>
@@ -18,7 +28,6 @@
         <option value="southsudan">South Sudan</option>
         <option value="syria">Syria</option>
     </select>
-
     <input type="submit" value="See Results" />
 </form>
 
@@ -215,7 +224,7 @@
        
         $(document).ready(function () {
             $('.results').submit(function (event) {
-                google.charts.load("visualization", "1", { packages: ["geochart", "table","corechart","bar"] });
+                google.charts.load("visualization", "1", { packages: ["geochart", "table", "corechart", "bar"] });
                 event.preventDefault();
                 var info = $("#name").val();
                 var name = info.split("||")[0];
