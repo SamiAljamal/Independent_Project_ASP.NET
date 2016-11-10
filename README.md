@@ -1,5 +1,4 @@
-# Refuge Crisis Map
-
+# Refugee Awarness: Visualizing the crisis
 #### A  site  aimed at taking Refuge Data from the UNHCR(United Nations High Commision for REfugees) and other formats and displaying the data visually to tell story of our worlds current Refugee Crisis.
 
 ###Setup & Installation
